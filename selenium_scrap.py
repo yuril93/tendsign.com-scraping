@@ -1,7 +1,15 @@
 import time
 import csv
 from selenium import webdriver
-browser = webdriver.Chrome(executable_path=r"C:\Users\Ashunik\Downloads\chromedriver.exe")
+from selenium.webdriver.chrome.options import Options
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+#chrome_options.binary_location = '/Applications/Google Chrome   Canary.app/Contents/MacOS/Google Chrome Canary'`
+
+browser = webdriver.Chrome(executable_path=r"C:\Users\yuril\Downloads\chromedriver.exe",options=chrome_options)
+import smtplib, ssl
+
 
 browser.get("https://tendsign.com/")
 
@@ -20,11 +28,7 @@ column_2 = []
 column_3 = []
 column_4 = []
 
-yuril=0
-#while len(browser.find_elements_by_link_text("Nästa"))>0:
-while yuril <3:
-
-
+while len(browser.find_elements_by_link_text("Nästa"))>0:
     c1 = browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-itemstyle']/td[1]")+browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-alternatingitemstyle']/td[1]")
     c2 = browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-itemstyle']/td[2]")+browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-alternatingitemstyle']/td[2]")
     c3 = browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-itemstyle']/td[3]")+browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-alternatingitemstyle']/td[3]")
@@ -33,28 +37,40 @@ while yuril <3:
     for ca in c1:
         column_1.append(ca.text)
     for cb in c2:
-      column_2.append(cb.text)
+        column_2.append(cb.text)
     for cc in c3:
-       column_3.append(cc.text)
+        column_3.append(cc.text)
     for cd in c4:
-      column_4.append(cd.text)
+        column_4.append(cd.text)
 
 
-
-    browser.find_elements_by_link_text("Nästa")[0].click()
-    yuril=yuril+1
-
-print(column_1,"\n",column_2,"\n",column_3,"\n",column_4)
+    while True:
+        try:
+            browser.find_elements_by_link_text("Nästa")[0].click()
+            print("next pacge")
+            break
+        except:
+            browser.refresh()#
+            time.sleep(10)
 
 data = [column_1, column_2, column_3, column_4]
 
-with open('seleniumData.csv', 'w', encoding='utf-8') as z:
+with open('seleniumData.csv', 'w', newline='') as z:
     writer = csv.writer(z)
     for x in range(len(column_1)):
         data = [[column_1[x], column_2[x], column_3[x], column_4[x]]]
         writer.writerows(data)
 z.close()
-   # for x in range(len(column_1)):
-#        z.write([column_1[x],column_2[x],column_3[x],column_4[x]]))
-#        z.write('\n')
+
+
+
+password = input("yura123321")
+# Create a secure SSL context
+context = ssl.create_default_context()
+
+#with smtplib.SMTP_SSL("smtp.gmail.com", 465, context="string") as server:
+#    server.login("yuraledyaev93@gmail.com", password)
+#    server.sendmail(yuraledyaev93@gmail.com, yuraledyaev93@gmail.com, context)
+
+# TODO: Send email here
 
