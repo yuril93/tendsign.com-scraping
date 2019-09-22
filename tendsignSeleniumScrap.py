@@ -10,9 +10,9 @@ from email.mime.text import MIMEText
 def sendEmail(subject):
     #subject# = "tendsign.com CSV data"
     body = "tendsign.com CSV data"
-    sender_email = "Your gmail" #gmail
-    password = "Your gmail app password " # gmail App password
-    receiver_email = "daniel@connectivo.se"
+    sender_email = "yuraledyaev93@gmail.com" #gmail
+    password = "buzwiuauxhdivfxr" # gmail App password
+    receiver_email = "yuraledyaev93@gmail.com"#"daniel@connectivo.se"
 
     # Create a multipart message and set headers
     message = MIMEMultipart()
@@ -40,7 +40,6 @@ def sendEmail(subject):
         "Content-Disposition",
         f"attachment; filename= {filename}",
     )
-
     # Add attachment to message and convert message to string
     message.attach(part)
     text = message.as_string()
@@ -52,17 +51,18 @@ def sendEmail(subject):
         server.sendmail(sender_email, receiver_email, text)
 
 with open('tendsign.csv', newline='') as f:
-  reader = csv.reader(f)
-  row1 = next(reader)
+    try:
+        reader = csv.reader(f)
+        row1 = next(reader)
+    except:
+        row1=[]
 f.close()
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-
 # chromedriver.exe path
 browser = webdriver.Chrome(executable_path=r"C:\Users\Ashunik\Downloads\chromedriver.exe",options=chrome_options)
 import smtplib, ssl
-
 
 browser.get("https://tendsign.com/")
 
@@ -78,7 +78,6 @@ column_1 = []
 column_2 = []
 column_3 = []
 column_4 = []
-
 
 if row1==[(((browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-itemstyle']/td[1]")+browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-alternatingitemstyle']/td[1]"))[0]).text), ((browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-itemstyle']/td[2]")+browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-alternatingitemstyle']/td[2]"))[0]).text, ((browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-itemstyle']/td[3]")+browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-alternatingitemstyle']/td[3]"))[0]).text, ((browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-itemstyle']/td[4]")+browser.find_elements_by_xpath("//tbody/tr[@class='datagrid-alternatingitemstyle']/td[4]"))[0]).text]:
     subject = "No updates in tendsign.com CSV data"
@@ -102,7 +101,6 @@ else:
         for cd in c4:
             column_4.append(cd.text)
 
-
         while True:
             try:
                 browser.find_elements_by_link_text("Nästa")[0].click()
@@ -122,7 +120,3 @@ else:
     print ("Sending email ...")
     sendEmail(subject="tendsign.com CSV data")
     print("Done")
-
-
-
-
